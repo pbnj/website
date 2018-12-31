@@ -12,4 +12,4 @@ build: ## builds site
 DATE := $(shell date '+%Y-%m-%dT%H:%M:%S')
 publish: build ## publishes content
 	cd public/
-	git add -A docs/ && git commit -m "Published $(DATE)" && git push origin master
+	git add -A . && git commit -m "Published $(DATE)" && git push origin master
