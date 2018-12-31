@@ -59,7 +59,7 @@ publishDir = "public/"
         icon  = "linkedin-in" # icon name without the 'fa-'
         icon_pack = "fab"
     [[params.social]]
-        url = "mailto:petermbenjamin@email.com"
+        url = "mailto:petermbenjamin@gmail.com"
         icon = "envelope" # icon name without the 'fa-'
         icon_pack = "fas"
 
