@@ -3,7 +3,7 @@ languageCode = "en-us"
 title = "Peter M. Benjamin"
 theme = "introduction" # https://github.com/vickylai/hugo-theme-introduction
 DefaultContentLanguage = "en"
-publishDir = "docs/"
+publishDir = "public/"
 
 [params]
     themeStyle                   = "light"                 # Choose "light" or "dark"
