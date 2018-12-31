@@ -3,4 +3,4 @@ title: "Peter M. Benjamin"
 headless: true
 ---
 
-Software Engineer | KuberNerd | Polyglot | Application Security Advocate | Minimalist
+Software Engineer. KuberNerd. Application Security Advocate. Minimalist.
