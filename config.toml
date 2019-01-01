@@ -12,7 +12,7 @@ publishDir = "public/"
     fadeIn                       = false                   # Turn on/off the fade-in effect
     fadeInIndex                  = true                    # Turn on/off the fade-in effect on the index page even if fade-in was otherwise turned off
     dateFormat                   = "Jan 2, 2006"
-    email                        = "petermbenjamin@email.com"   # E-mail address for contact section
+    email                        = "petermbenjamin@gmail.com"   # E-mail address for contact section
 
     # Configure the home page
     [params.home]
