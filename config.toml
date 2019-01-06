@@ -30,7 +30,6 @@ useTwoColumns = false
 twitter = true
 linkedin = true
 
-<<<<<<< HEAD
 [[params.social]]
 url   = "https://twitter.com/petermbenjamin"
 icon  = "twitter"
