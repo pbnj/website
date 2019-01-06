@@ -30,6 +30,7 @@ useTwoColumns = false
 twitter = true
 linkedin = true
 
+<<<<<<< HEAD
 [[params.social]]
 url   = "https://twitter.com/petermbenjamin"
 icon  = "twitter"
@@ -58,4 +59,3 @@ icon_pack = "fab"
 url = "mailto:petermbenjamin@gmail.com"
 icon = "envelope"
 icon_pack = "fas"
-
