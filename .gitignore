@@ -1,2 +1,3 @@
 *.swp
 resources/
+.DS_Store
