@@ -1,7 +1,7 @@
 ---
 title: "Docker Security Best Practices"
 date: 2018-07-19T21:21:23-08:00
-tags: ["docker", "container", "security"]
+tags: ["docker", "kubernetes", "container", "security"]
 ---
 
 ![container](https://upload.wikimedia.org/wikipedia/en/4/41/Stefan_Beese%27s_Eco_Shipping_Container_Lounge_by_Melissa_Carrier.jpg)
