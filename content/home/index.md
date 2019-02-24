@@ -3,4 +3,4 @@ title: "Peter M. Benjamin"
 headless: true
 ---
 
-Software Engineer. KuberNerd. Application Security Advocate.
+Kubernetes Security. [@KubernetesSD](https://twitter.com/KubernetesSD) Co-organizer. Software Engineer. Open Source Zealot. 
