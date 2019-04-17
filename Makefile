@@ -13,7 +13,10 @@ DATE := $(shell date '+%Y-%m-%dT%H:%M:%S')
 publish: build ## publishes content
 	cd public && git add -A . && git commit -m "Published $(DATE)" && git push origin master
 
-.PHONY: setup
-setup: ## sets up environment with all required packages/dependencies
-	hugo version
-	npm install -g autoprefixer postcss-cli
+.PHONY: docker-build
+docker-build: ## builds development docker image
+	docker build -t website:dev .
+
+.PHONY: dev
+dev: ## runs dev container
+	docker run --rm -it -v $(PWD):/website -w /website website:dev
