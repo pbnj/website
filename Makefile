@@ -8,6 +8,14 @@ serve: ## serves site on localhost:1313
 build: ## builds site
 	hugo
 
+.PHONY: build-docker
+build-docker: ## builds site in docker
+	docker run \
+	--rm \
+	-v $(PWD):/www \
+	-w /www \
+	website:dev hugo
+
 .PHONY: publish
 DATE := $(shell date '+%Y-%m-%dT%H:%M:%S')
 publish: build ## publishes content
