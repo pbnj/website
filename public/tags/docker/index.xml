@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Docker on Peter M. Benjamin</title>
+    <link>https://petermbenjamin.github.io/tags/docker/</link>
+    <description>Recent content in Docker on Peter M. Benjamin</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 19 Jul 2018 21:21:23 -0800</lastBuildDate>
+    
+	<atom:link href="https://petermbenjamin.github.io/tags/docker/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Docker Security Best Practices</title>
+      <link>https://petermbenjamin.github.io/blog/docker-security-best-practices/</link>
+      <pubDate>Thu, 19 Jul 2018 21:21:23 -0800</pubDate>
+      
+      <guid>https://petermbenjamin.github.io/blog/docker-security-best-practices/</guid>
+      <description>Table of Contents  Overview The Host Docker Hardening Standard Docker Engine Container Privileges Static Analysis Runtime Security Conclusion  Overview Containers have revolutionized the tech industry in recent years for many reasons. Because of their properties of encapsulating dependencies into a portable container image, many organizations have adopted them as the primary method of developing, building, and deploying production applications.
+As a Software Engineer and a Security Engineer, I cannot even begin to express my excitement for the game-changing potential of containers and orchestrators, namely Kubernetes.</description>
+    </item>
+    
+    <item>
+      <title>Kubernetes Security Best Practices</title>
+      <link>https://petermbenjamin.github.io/blog/kubernetes-security-best-practices/</link>
+      <pubDate>Thu, 19 Jul 2018 10:27:21 -0800</pubDate>
+      
+      <guid>https://petermbenjamin.github.io/blog/kubernetes-security-best-practices/</guid>
+      <description>Table of Contents  Overview Secure Baseline Authentication Authorization Admission Controls Impersonation Pod Security Policies Network Policies Additional Security Measures Additional References Conclusion  Overview So, you are all-in on container technology. You may be spinning up a container for your application and another container for the database locally on your machine, but then what? You need systems to build your containers. You need systems to deploy your containers. You need systems to run your containers.</description>
+    </item>
+    
+  </channel>
+</rss>

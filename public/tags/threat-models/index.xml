@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Threat Models on Peter M. Benjamin</title>
+    <link>https://petermbenjamin.github.io/tags/threat-models/</link>
+    <description>Recent content in Threat Models on Peter M. Benjamin</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 18 Aug 2018 10:57:56 -0800</lastBuildDate>
+    
+	<atom:link href="https://petermbenjamin.github.io/tags/threat-models/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Demystifying Stride Threat Models</title>
+      <link>https://petermbenjamin.github.io/blog/demystifying-stride-threat-models/</link>
+      <pubDate>Sat, 18 Aug 2018 10:57:56 -0800</pubDate>
+      
+      <guid>https://petermbenjamin.github.io/blog/demystifying-stride-threat-models/</guid>
+      <description>Table of Contents  Introduction What is a Threat Model? What is STRIDE?  Spoofing Tampering Repudiation Information Disclosure Denial of Service Elevation of Privileges  Summary Additional Resources  Introduction Software is eating the world. As a result, the repercussions of software failure is costly and, at times, can be catastrophic. This can be seen today in a wide variety of incidents, from data leak incidents caused by misconfigured AWS S3 buckets to Facebook data breach incidents due to lax API limitations to the Equifax incident due to the use of an old Apache Struts version with a known critical vulnerability.</description>
+    </item>
+    
+  </channel>
+</rss>

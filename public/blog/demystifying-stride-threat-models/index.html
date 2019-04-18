@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        
+        <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+
+<title>
+Demystifying Stride Threat Models - Peter M. Benjamin
+</title>
+
+
+
+        <meta property="og:title" content="Demystifying Stride Threat Models - Peter M. Benjamin" />
+<meta property="og:type" content="website" />
+<meta property="og:description" content=""/>
+<meta property="og:url" content="https://petermbenjamin.github.io/blog/demystifying-stride-threat-models/"/>
+<meta property="og:site_name" content="Peter M. Benjamin"/>
+
+
+
+
+<meta property="og:image" content="https://petermbenjamin.github.io/home/profile.jpg"/>
+
+
+
+
+        
+<link rel="shortcut icon" href="/img/fav.ico">
+
+
+        
+
+
+
+
+
+<link rel="stylesheet" href="https://petermbenjamin.github.io/css/main.min.a64ad5ef43d264261f9b9449720a23201e20767a197d86e527fb49953c60e940.css" integrity="sha256-pkrV70PSZCYfm5RJcgojIB4gdnoZfYblJ/tJlTxg6UA=" crossorigin="anonymous" media="screen">
+
+
+
+
+    <link rel="stylesheet" href="https://petermbenjamin.github.io/css/all.min.css" integrity="" crossorigin="anonymous" media="screen">
+
+        
+        
+        
+        
+    </head>
+    <body>
+        <section id="top" class="section">
+            
+            <div class="container hero ">
+                
+
+    <h1 class="bold-title is-1">Blog</h1>
+
+
+            </div>
+            
+            <div class="section ">
+                
+<div class="container">
+    <hr>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        
+        <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false" >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+        <div class="navbar-menu " id="navMenu">
+            
+            
+            
+            
+            <a class="navbar-item" href="/">main</a>
+            
+
+            
+            
+            
+            
+            
+            <a class="navbar-item" href="/#about">About</a>
+            
+            
+            
+
+            
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="navbar-item" href="https://petermbenjamin.github.io/blog/">
+                
+                Back to Blog
+                
+            </a>
+            
+            
+            
+
+            
+            
+            <a class="navbar-item" href="/#contact">Contact</a>
+            
+            
+
+            
+            
+            
+
+            
+            <a class="navbar-item" href="https://petermbenjamin.github.io/index.xml"><i class="fas fa-rss"></i></a>
+            
+            
+        </div>
+    </nav>
+    <hr>
+</div>
+
+
+
+                
+    <div class="container">
+        <h2 class="title is-1 top-pad strong-post-title">
+            <a href="https://petermbenjamin.github.io/blog/demystifying-stride-threat-models/">Demystifying Stride Threat Models</a>
+        </h2>
+        <div class="post-data">
+            Aug 18, 2018 |
+            5 minutes read
+        </div>
+        
+        <div class="blog-share">
+            Share this:
+            
+            <a class="twitter-share-button" href="https://twitter.com/intent/tweet?text=Demystifying%20Stride%20Threat%20Models%20https%3a%2f%2fpetermbenjamin.github.io%2fblog%2fdemystifying-stride-threat-models%2f" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fab fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+            
+            
+            
+            
+        </div>
+        
+        
+        
+        <p>
+            Tags:
+            
+            <a href="/tags/security">security</a>,
+            
+            <a href="/tags/threat-models">threat models</a>,
+            
+            <a href="/tags/stride">stride</a>,
+            
+            <a href="/tags/application-security">application security</a>
+            
+        </p>
+        
+    </div>
+    
+    <div class="container markdown top-pad">
+        
+
+<h2 id="table-of-contents">Table of Contents</h2>
+
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#what-is-a-threat-model">What is a Threat Model?</a></li>
+<li><a href="#what-is-stride">What is STRIDE?</a>
+
+<ul>
+<li><a href="#spoofing">Spoofing</a></li>
+<li><a href="#tampering">Tampering</a></li>
+<li><a href="#repudiation">Repudiation</a></li>
+<li><a href="#information-disclosure">Information Disclosure</a></li>
+<li><a href="#denial-of-service">Denial of Service</a></li>
+<li><a href="#elevation-of-privileges">Elevation of Privileges</a></li>
+</ul></li>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#additional-resources">Additional Resources</a></li>
+</ul>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Software is eating the world. As a result, the repercussions of software failure is costly and, at times, can be catastrophic. This can be seen today in a wide variety of incidents, from data leak incidents caused by misconfigured <a href="https://github.com/petermbenjamin/yas3bl">AWS S3 buckets</a> to Facebook data breach incidents due to <a href="https://techcrunch.com/2018/06/28/facepalm-2/">lax API limitations</a> to the Equifax incident due to the use of <a href="https://www.synopsys.com/blogs/software-security/equifax-apache-struts-cve-2017-5638-vulnerability/">an old Apache Struts version with a known critical vulnerability</a>.</p>
+
+<p>Application Security advocates encourage developers and engineers to adopt security practices as early in the Software Development Life Cycle (SDLC) as possible <sup><a href="#tanya-janca">1</a></sup>. One such security practice is <strong>Threat Modeling</strong>.</p>
+
+<p>In this article, I offer a high-level introduction to one methodology, called STRIDE, and in a future article, I will demonstrate this process using an existing open-source application as an example.</p>
+
+<h2 id="what-is-a-threat-model">What is a Threat Model?</h2>
+
+<p>Here is the obligatory <a href="https://en.wikipedia.org/wiki/Threat_model">Wikipedia definition</a>:</p>
+
+<blockquote>
+<p>Threat modeling is a process by which potential threats, such as structural vulnerabilities, can be identified, enumerated, and prioritized – all from a hypothetical attacker’s point of view. The purpose of threat modeling is to provide defenders with a systematic analysis of the probable attacker’s profile, the most likely attack vectors, and the assets most desired by an attacker.</p>
+</blockquote>
+
+<p>With that out of the way, the simplest explanation in English is this:</p>
+
+<p><em>Threat Models are a systematic and structured way to identify and mitigate security risks in our software</em>.</p>
+
+<p>There are various ways and methodologies of doing threat models, one of which is a process popularized by Microsoft, called <em>STRIDE</em>.</p>
+
+<h2 id="what-is-stride">What is STRIDE?</h2>
+
+<p>STRIDE is an acronym that stands for 6 categories of security risks: Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, and Elevation of Privileges.</p>
+
+<p>Each category of risk aims to address one aspect of security.</p>
+
+<p>Let&rsquo;s dive into each of these categories.</p>
+
+<hr />
+
+<h3 id="spoofing">Spoofing</h3>
+
+<p>Spoofing refers to the act of posing as someone else (i.e. spoofing a user) or claiming a false identity (i.e. spoofing a process).</p>
+
+<p>This category is concerned with <strong>authenticity</strong>.</p>
+
+<p>Examples:</p>
+
+<ul>
+<li>One user spoofs the identify of another user by brute-forcing username/password credentials.</li>
+<li>A malicious, phishing host is set up in an attempt to trick users into divulging their credentials.</li>
+</ul>
+
+<p>You would typically mitigate these risks with proper <a href="https://www.owasp.org/index.php/Authentication_Cheat_Sheet">authentication</a>.</p>
+
+<hr />
+
+<h3 id="tampering">Tampering</h3>
+
+<p>Tampering refers to malicious modification of data or processes. Tampering may occur on data in transit, on data at rest, or on processes.</p>
+
+<p>This category is concerned with <strong>integrity</strong>.</p>
+
+<p>Examples:</p>
+
+<ul>
+<li>A user performs <a href="https://en.wikipedia.org/wiki/Bit-flipping_attack">bit-flipping attacks</a> on data in transit.</li>
+<li>A user modifies data at rest/on disk.</li>
+<li>A user performs <a href="https://en.wikipedia.org/wiki/Code_injection">injection attacks</a> on the application.</li>
+</ul>
+
+<p>You would typically mitigate these risks with:</p>
+
+<ul>
+<li>Proper validation of users&rsquo; inputs and proper encoding of outputs.</li>
+<li>Use prepared SQL statements or stored procedures to mitigate SQL injections.</li>
+<li>Integrate with security static code analysis tools to identify security bugs.</li>
+<li>Integrate with composition analysis tools (e.g. <code>snyk</code>, <code>npm audit</code>, BlackDuck &hellip;etc) to identify 3rd party libraries/dependencies with known security vulnerabilities.</li>
+</ul>
+
+<hr />
+
+<h3 id="repudiation">Repudiation</h3>
+
+<p>Repudiation refers to the ability of denying that an action or an event has occurred.</p>
+
+<p>This category is concerned with <strong>non-repudiation</strong>.</p>
+
+<p>Examples:</p>
+
+<ul>
+<li>A user denies performing a destructive action (e.g. deleting all records from a database).</li>
+<li>Attackers commonly erase or truncate log files as a technique for hiding their tracks.</li>
+<li>Administrators unable to determine if a container has started to behave suspiciously/erratically.</li>
+</ul>
+
+<p>You would typically mitigate these risks with proper <a href="https://www.computerweekly.com/tip/Best-practices-for-audit-log-review-for-IT-security-investigations">audit logging</a>.</p>
+
+<hr />
+
+<h3 id="information-disclosure">Information Disclosure</h3>
+
+<p>Information Disclosure refers to data leaks or data breaches. This could occur on data in transit, data at rest, or even to a process.</p>
+
+<p>This category is concerned with <strong>confidentiality</strong>.</p>
+
+<p>Examples:</p>
+
+<ul>
+<li>A user is able to eavesdrop, sniff, or read traffic in clear-text.</li>
+<li>A user is able to read data on disk in clear-text.</li>
+<li>A user attacks an application protected by TLS but is able to steal x.509 (SSL/TLS certificate) decryption keys and other sensitive information. <a href="https://en.wikipedia.org/wiki/Heartbleed">Yes, this happened</a>.</li>
+<li>A user is able to read sensitive data in a database.</li>
+</ul>
+
+<p>You would typically mitigate these risks by:</p>
+
+<ul>
+<li>Implementing proper <a href="https://www.owasp.org/index.php/Cryptographic_Storage_Cheat_Sheet">encryption</a>.</li>
+<li>Avoiding self-signed certificates. Use a valid, trusted Certificate Authority (CA).</li>
+</ul>
+
+<hr />
+
+<h3 id="denial-of-service">Denial of Service</h3>
+
+<p>Denial of Service refers to causing a service or a network resource to be unavailable to its intended users.</p>
+
+<p>This category is concerned with <strong>availability</strong>.</p>
+
+<p>Examples:</p>
+
+<ul>
+<li>A user performs <a href="https://en.wikipedia.org/wiki/SYN_flood">SYN flood</a> attack.</li>
+<li>The storage (i.e. disk, drive) becomes too full.</li>
+<li>A Kubernetes dashboard is left exposed on the Internet, allowing anyone to deploy containers on your company&rsquo;s infrastructure to mine cryptocurrency and starve your legitimate applications of CPU. <a href="https://redlock.io/blog/cryptojacking-tesla">Yes, that happened too</a>.</li>
+</ul>
+
+<p>Mitigating this class of security risks is tricky because solutions are highly dependent on a lot of factors.</p>
+
+<p>For the Kubernetes example, you would mitigate resource consumption with <a href="https://kubernetes.io/docs/concepts/policy/resource-quotas/">resource quotas</a>.</p>
+
+<p>For a storage example, you would mitigate this with proper log rotation and monitoring/alerting when disk is nearing capacity.</p>
+
+<hr />
+
+<h3 id="elevation-of-privileges">Elevation of Privileges</h3>
+
+<p>Elevation of Privileges refers to gaining access that one should not have.</p>
+
+<p>This category is concerned with <strong>authorization</strong>.</p>
+
+<p>Example:</p>
+
+<ul>
+<li>A user takes advantage of a Buffer Overflow to gain root-level privileges on a system.</li>
+<li>A user with limited to no permissions to Kubernetes can elevate their privileges by sending a specially crafted request to a container with the Kubernetes API server&rsquo;s TLS credentials. <a href="https://github.com/kubernetes/kubernetes/issues/71411">Yes, this was possible</a>.</li>
+</ul>
+
+<p>Mitigating these risks would require a few things:</p>
+
+<ul>
+<li>Proper authorization mechanism (e.g. role-based access control).</li>
+<li>Security static code analysis to ensure your code has little to no security bugs.</li>
+<li>Compositional analysis (aka dependency checking/scanning), like <a href="https://snyk.io"><code>snyk</code></a> or <a href="https://docs.npmjs.com/cli/audit"><code>npm audit</code></a>, to ensure that you&rsquo;re not relying on known-vulnerable 3rd party dependencies.</li>
+<li>Generally practicing least privilege principle, like running your web server as a non-root user.</li>
+</ul>
+
+<hr />
+
+<h2 id="summary">Summary</h2>
+
+<p>So, STRIDE is a threat model methodology that should help you systematically examine and address gaps in the security posture of your applications.</p>
+
+<p>In a future article, we&rsquo;ll take an application and go through this process so you can get a feel for how this works.</p>
+
+<p>If you would like to propose an application for me to threat model next, feel free to drop suggestions in the comments below.</p>
+
+<h2 id="additional-resources">Additional Resources</h2>
+
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/STRIDE_(security">https://en.wikipedia.org/wiki/STRIDE_(security</a>)</li>
+<li><a href="https://www.webtrends.com/blog/2015/04/threat-modeling-with-stride/">https://www.webtrends.com/blog/2015/04/threat-modeling-with-stride/</a></li>
+<li><a href="https://www.oreilly.com/library/view/threat-modeling-designing/9781118810057/9781118810057c03.xhtml">https://www.oreilly.com/library/view/threat-modeling-designing/9781118810057/9781118810057c03.xhtml</a></li>
+</ul>
+
+<hr />
+
+<h2 id="footnotes">Footnotes</h2>
+
+<ul>
+<li><a name="tanya-janca">1</a>: <a href="https://www.youtube.com/watch?v=YGJqpQy79no&amp;WT.mc_id=shehackspurple-blog-tajanca">https://www.youtube.com/watch?v=YGJqpQy79no&amp;WT.mc_id=shehackspurple-blog-tajanca</a></li>
+</ul>
+
+<hr />
+
+<h2 id="updates">Updates</h2>
+
+<ol>
+<li>Add more mitigations against tampering.</li>
+<li>Add more mitigations against information disclosure.</li>
+</ol>
+
+    </div>
+    
+    <div class="disqus">
+        
+    </div>
+
+
+                
+                <div class="container">
+    <hr>
+</div>
+<div class="container has-text-centered top-pad">
+    <a href="#top">
+        <i class="fa fa-arrow-up"></i>
+    </a>
+</div>
+
+<div class="container">
+    <hr>
+</div>
+
+                <div class="section" id="footer">
+    <div class="container has-text-centered">
+    
+        <span class="footer-text">
+            <a href="https://github.com/vickylai/hugo-theme-introduction/"><strong>Introduction</strong></a> theme for <a href="http://gohugo.io/">Hugo</a>. Made with <a href="https://vickylai.com"><i class="fa fa-heart"></i> and <i class="fa fa-coffee"></i></a> by open source contributors.
+        </span>
+    
+    </div>
+</div>
+
+                
+            </div>
+        </section>
+        
+        
+
+
+<script src="https://petermbenjamin.github.io/js/bundle.baa2874a80b328e7dec720d3a90efc6efd25ccdf1611f37d9571354e88987590.js" integrity="sha256-uqKHSoCzKOfexyDTqQ78bv0lzN8WEfN9lXE1ToiYdZA="></script>
+
+
+
+        
+        
+        
+        
+    </body>
+</html>

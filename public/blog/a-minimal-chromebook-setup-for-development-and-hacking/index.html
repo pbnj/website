@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        
+        <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+
+<title>
+A Minimal Chromebook Setup for Development and Hacking - Peter M. Benjamin
+</title>
+
+
+
+        <meta property="og:title" content="A Minimal Chromebook Setup for Development and Hacking - Peter M. Benjamin" />
+<meta property="og:type" content="website" />
+<meta property="og:description" content=""/>
+<meta property="og:url" content="https://petermbenjamin.github.io/blog/a-minimal-chromebook-setup-for-development-and-hacking/"/>
+<meta property="og:site_name" content="Peter M. Benjamin"/>
+
+
+
+
+<meta property="og:image" content="https://petermbenjamin.github.io/home/profile.jpg"/>
+
+
+
+
+        
+<link rel="shortcut icon" href="/img/fav.ico">
+
+
+        
+
+
+
+
+
+<link rel="stylesheet" href="https://petermbenjamin.github.io/css/main.min.a64ad5ef43d264261f9b9449720a23201e20767a197d86e527fb49953c60e940.css" integrity="sha256-pkrV70PSZCYfm5RJcgojIB4gdnoZfYblJ/tJlTxg6UA=" crossorigin="anonymous" media="screen">
+
+
+
+
+    <link rel="stylesheet" href="https://petermbenjamin.github.io/css/all.min.css" integrity="" crossorigin="anonymous" media="screen">
+
+        
+        
+        
+        
+    </head>
+    <body>
+        <section id="top" class="section">
+            
+            <div class="container hero ">
+                
+
+    <h1 class="bold-title is-1">Blog</h1>
+
+
+            </div>
+            
+            <div class="section ">
+                
+<div class="container">
+    <hr>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        
+        <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false" >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+        <div class="navbar-menu " id="navMenu">
+            
+            
+            
+            
+            <a class="navbar-item" href="/">main</a>
+            
+
+            
+            
+            
+            
+            
+            <a class="navbar-item" href="/#about">About</a>
+            
+            
+            
+
+            
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="navbar-item" href="https://petermbenjamin.github.io/blog/">
+                
+                Back to Blog
+                
+            </a>
+            
+            
+            
+
+            
+            
+            <a class="navbar-item" href="/#contact">Contact</a>
+            
+            
+
+            
+            
+            
+
+            
+            <a class="navbar-item" href="https://petermbenjamin.github.io/index.xml"><i class="fas fa-rss"></i></a>
+            
+            
+        </div>
+    </nav>
+    <hr>
+</div>
+
+
+
+                
+    <div class="container">
+        <h2 class="title is-1 top-pad strong-post-title">
+            <a href="https://petermbenjamin.github.io/blog/a-minimal-chromebook-setup-for-development-and-hacking/">A Minimal Chromebook Setup for Development and Hacking</a>
+        </h2>
+        <div class="post-data">
+            May 6, 2018 |
+            8 minutes read
+        </div>
+        
+        <div class="blog-share">
+            Share this:
+            
+            <a class="twitter-share-button" href="https://twitter.com/intent/tweet?text=A%20Minimal%20Chromebook%20Setup%20for%20Development%20and%20Hacking%20https%3a%2f%2fpetermbenjamin.github.io%2fblog%2fa-minimal-chromebook-setup-for-development-and-hacking%2f" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fab fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+            
+            
+            
+            
+        </div>
+        
+        
+        
+        <p>
+            Tags:
+            
+            <a href="/tags/chromebook">chromebook</a>,
+            
+            <a href="/tags/development">development</a>,
+            
+            <a href="/tags/hacking">hacking</a>,
+            
+            <a href="/tags/minimal">minimal</a>
+            
+        </p>
+        
+    </div>
+    
+    <div class="container markdown top-pad">
+        
+
+<h2 id="table-of-contents">Table of Contents</h2>
+
+<ul>
+<li><a href="#the-tldr-version">The TLDR Version</a></li>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#the-solid-principles">The SOLID Principles</a>
+
+<ul>
+<li><a href="#security">Security</a></li>
+<li><a href="#ownership-cost">Ownership Cost</a></li>
+<li><a href="#leverage-native-capabilities">Leverage Native Capabilities</a></li>
+<li><a href="#inherent-restrictions">Inherent Restrictions</a></li>
+<li><a href="#developer-experience">Developer Experience</a></li>
+</ul></li>
+<li><a href="#the-details">The Details</a>
+
+<ul>
+<li><a href="#hardware">Hardware</a></li>
+<li><a href="#software">Software</a></li>
+</ul></li>
+<li><a href="#parting-thoughts">Parting Thoughts</a></li>
+</ul>
+
+<h2 id="the-tldr-version">The TLDR Version</h2>
+
+<ul>
+<li>If you buy a Chromebook, stay within the confines and stick with ChromeOS;
+it’s not worth hacking to enable dual-booting, side-loading, or wiping of
+ChromeOS for a Linux distro.
+
+<ul>
+<li>If you insist on a Linux distro, just buy a used Lenovo; it will be more
+capable, versatile, and compatible with your Linux distro out-of-the-box.</li>
+<li>Whatever you do, <strong>DO NOT</strong> enable &ldquo;Dev Mode&rdquo;.</li>
+</ul></li>
+<li>Best-in-class Chromebook hardware ≤ $500 (in order):
+<a href="https://www.samsung.com/us/computing/chromebooks/12-14/samsung-chromebook-pro-xe510c24-k01us/">Samsung Chromebook Pro</a>
+(approx. $500),
+<a href="https://www.asus.com/us/2-in-1-PCs/ASUS-Chromebook-Flip-C302CA/">Asus Chromebook Flip C302</a>
+(approx. $450),
+<a href="https://www.amazon.com/Acer-ChromeBook-CP5-471-35T4-Black-NX-GE8AA-002/dp/B01EPZIJRQ/ref=sr_1_4?ie=UTF8&amp;qid=1523224085&amp;sr=8-4&amp;keywords=chromebook+for+work">Acer Chromebook for Work</a>
+(approx. $400).
+
+<ul>
+<li>Otherwise, aim for an Intel-based chip (e.g. Celeron) and a minimum of 4 GB
+RAM.</li>
+</ul></li>
+<li><a href="https://chrome.google.com/webstore/detail/secure-shell-app/pnhechapfaindjhompbnflcldabbghjo">Secure Shell</a>: the Chrome extension for SSH. Multi-Factor Authentication (MFA) highly recommended.</li>
+<li><a href="https://termux.com/">Termux</a>: a full-featured terminal-emulator Android-app with lots of developer-friendly plugins, like access to clipboard, notifications, external storage, and more.</li>
+<li>GUI-based editors are also available as Chrome Apps, like <a href="https://chrome.google.com/webstore/detail/caret/fljalecfjciodhpcledpamjachpmelml?hl=en">Caret</a>, <a href="https://chrome.google.com/webstore/detail/zed-code-editor/pfmjnmeipppmcebplngmhfkleiinphhp?hl=en">Zed</a>, &amp; <a href="https://chrome.google.com/webstore/detail/text/mmfbcljfglbokpmkimbfghdkjmjhdgbg?hl=en">Text</a>.
+
+<ul>
+<li><a href="https://github.com/googlearchive/chromedeveditor">Chrome Dev Editor</a> was a really nice IDE that almost matched modern desktop-based editors on features (e.g. Atom &amp; VS Code), but it is not longer in active development, unfortunately.</li>
+</ul></li>
+</ul>
+
+<hr />
+
+<h2 id="introduction">Introduction</h2>
+
+<p>I decided to share my recommended Chromebook development setup because I am
+tired of <a href="https://www.theverge.com/2017/11/16/16656420/google-pixelbook-chromebook-development-linux-crouton-how-to">seeing</a> <a href="http://programmingzen.com/developing-with-a-chromebook/">the</a> <a href="https://arstechnica.com/gadgets/2017/06/how-to-install-linux-on-a-chromebook/">same</a> <a href="https://headmelted.com/coding-on-a-chromebook-84335cce96c8">misinformed</a> <a href="https://medium.com/@martinmalinda/ultimate-guide-for-web-development-on-chromebook-part-1-crouton-2ec2e6bb2a2d">and</a> <a href="https://gist.github.com/rachelmyers/d7023ef34e58fe925f9c">misguided</a> recommendations that lead to:</p>
+
+<ul>
+<li>A painful development experience</li>
+<li>A cheap Linux machine with terrible driver support</li>
+<li>Wildly insecure and highly risky machines</li>
+</ul>
+
+<p>So, how will my recommendation be different than those previously listed?</p>
+
+<p>I have my own SOLID set of guiding principles that I will discuss in detail.</p>
+
+<p><em>Note:</em> Keep in mind that there is no setup without its own set of drawbacks.</p>
+
+<h2 id="the-solid-principles">The SOLID Principles</h2>
+
+<h3 id="security">Security</h3>
+
+<p>ChromeOS comes with a set of really — and I mean REALLY — strong security
+controls built-in. So much so that CoreOS, a specialized server operating system
+for containers, is based on ChromeOS.</p>
+
+<p>So, it is justifiably cringe-worthy that the first recommendation would be
+“disable all those secure features and turn on Dev Mode”.</p>
+
+<p>Why is Dev Mode insecure?</p>
+
+<ul>
+<li>Disables Verified Boot.
+
+<ul>
+<li>Verified Boot ensures that ChromeOS is booting using known-good firmware, kernel, init, modules, fs metadata, policies, …etc.</li>
+<li>By disabling Verified Boot, you’re essentially allowing persistent compromises.</li>
+</ul></li>
+<li>Enables VT2 (Linux terminal).</li>
+<li>Activates passwordless root shell access. Yes, you read that right.</li>
+<li>Access to unencrypted content of your Chrome profile.</li>
+</ul>
+
+<p>On top of that, adding Crouton to side-load Linux distributions adds another huge vector. You’re essentially running un-vetted code as root on your Chromebook. Not only that, but nothing is stopping code running as root in a chrooted environment from escaping the chroot and infecting the rest of ChromeOS.</p>
+
+<blockquote>
+<p>Essentially, dev mode by default is less physically secure than a standard laptop running Linux - <a href="https://github.com/dnschneid/crouton/wiki/Security"> David Schneider</a> (creator of Crouton)</p>
+</blockquote>
+
+<p>If you insist on a Linux distribution, you are better served by finding an old, used, cheap Lenovo Thinkpad and installing your favorite Linux distribution on it. You’ll have a more secure environment than a Chromebook in Dev Mode and a better overall experience than a Chromebook running a Linux distribution.</p>
+
+<h3 id="ownership-cost">Ownership Cost</h3>
+
+<ul>
+<li>Avoid any recommendations that would unnecessarily raise the cost of ownership (e.g. buying additional hardware/software to perform needed tasks).</li>
+<li>Keep costs as low as possible.</li>
+</ul>
+
+<h3 id="leverage-native-capabilities">Leverage Native Capabilities</h3>
+
+<ul>
+<li>Leverage the native capabilities of the platform (e.g. web apps &gt; android apps &gt; containers).</li>
+<li>Avoid unnecessary hacks that impact performance.</li>
+</ul>
+
+<h3 id="inherent-restrictions">Inherent Restrictions</h3>
+
+<ul>
+<li>The Chromebook stack (hardware &amp; software) is optimized for ChromeOS.
+
+<ul>
+<li>Thus, you should accept and embrace the inherent restrictions that come with the decision of using a Chromebook. They ultimately force you treat your machine as cattle, not pets.</li>
+<li>Your profile, preferences, settings, files are stored in the cloud. If you lose your Chromebook, you can just replace it and keep going with little disruption and inconvenience.</li>
+</ul></li>
+<li>Attempts at bypassing or mitigating these restrictions will result in compromises that will impact one or more aspects of the stack (incompatible drivers, slow/weak performance, poor battery life, lack of security …etc).</li>
+</ul>
+
+<h3 id="developer-experience">Developer Experience</h3>
+
+<ul>
+<li>Strive for the smoothest developer experience possible.</li>
+<li>I define Developer experience as, but not limited to:
+
+<ul>
+<li>battery life</li>
+<li>performance</li>
+<li>productivity</li>
+<li>tooling</li>
+<li>flexibility/versatility of working offline</li>
+</ul></li>
+</ul>
+
+<h2 id="the-details">The Details</h2>
+
+<p>I have been using a Chromebook as my primary personal machine for a few years now. So, I have experimented with a variety of different hardware and software combinations. I am also very familiar with the initial pains of getting acclimated to this new setup. But, once I’ve adapted to it, I noticed that I have applied the same philosophy to my work setup.</p>
+
+<p>I also consider myself a pro user with often conflicting needs:</p>
+
+<p>On the one hand, as a Software Engineer, I prefer to work on my personal and work-related projects on remote development environments (I would also like to be able to do local/offline development when absolutely needed).
+On the other hand, as an Information Security Engineer, SSH&rsquo;ing into a remote server is not an option and I certainly need to be able to — erm, do some things 😏 — directly from my local machine.</p>
+
+<p>Here is where I have landed…</p>
+
+<h3 id="hardware">Hardware</h3>
+
+<ul>
+<li>Prefer Intel-based chips over ARM ones.
+
+<ul>
+<li>Most developer programs &amp; tools are built for and supported on Intel chips first.</li>
+</ul></li>
+<li>Prefer larger RAM.
+
+<ul>
+<li>A minimum of 4GB RAM.</li>
+<li>I found that 2GB is barely usable, especially with the recently added support for Android apps.</li>
+</ul></li>
+<li>Prefer larger storage.
+
+<ul>
+<li>64GB storage is nice, but 32GB will work too.</li>
+<li>You need to take into account how much local development versus remote development you are comfortable with.</li>
+</ul></li>
+</ul>
+
+<p>Based on these loose hardware recommendations, the following are the top 3:</p>
+
+<ul>
+<li>Asus Chromebook Flip C302 (~$450)
+
+<ul>
+<li>Intel m3</li>
+<li>4GB RAM</li>
+<li>64GB storage.</li>
+</ul></li>
+<li>Samsung Chromebook Pro (~$500)
+
+<ul>
+<li>Intel m3</li>
+<li>4GB RAM</li>
+<li>32GB storage</li>
+<li>Stylus included</li>
+</ul></li>
+<li>Acer Chromebook for Work (~$400)
+
+<ul>
+<li>Intel 6th-gen i3</li>
+<li>4GB RAM</li>
+<li>32GB storage.</li>
+</ul></li>
+</ul>
+
+<p>Alternatively, these are significantly more affordable and could be sufficient for your use-case:</p>
+
+<ul>
+<li>Samsung Chromebook 3 (approx. $200)</li>
+<li>2017 Samsung Chromebook 11.6inch (approx. $250)</li>
+<li>ASUS C300 (approx. $200)</li>
+</ul>
+
+<h3 id="software">Software</h3>
+
+<p>I will be straight-forward with you here: <strong>get comfortable living in the terminal</strong>.</p>
+
+<p>GUI-based IDEs/editors for local software development on Chromebooks are not there yet, but they are getting better.</p>
+
+<p>There are some lightweight GUI editors, but they lack many critical features needed for software development (e.g. git integration, search-and-replace, auto-completion …etc). These lightweight GUI editors are good for light editing/note-taking at best.</p>
+
+<p>This is a good thing and I&rsquo;ll tell you why:</p>
+
+<p>The Kubernetes and Docker container movement has ushered in an era of DevOps that can be summarized as &ldquo;<em>Pets versus Cattle</em>&ldquo;:</p>
+
+<blockquote>
+<p>In the old way of doing things, we treat our servers like pets, for example Bob the mail server. If Bob goes down, it’s all hands on deck. The CEO can’t get his email and it’s the end of the world. In the new way, servers are numbered, like cattle in a herd. For example, www001 to www100. When one server goes down, it’s taken out back, shot, and replaced on the line. - <a href="http://cloudscaling.com/blog/cloud-computing/the-history-of-pets-vs-cattle/">Randy Bias</a></p>
+</blockquote>
+
+<p>Here is the baseline software stack I use for development (all of which are installed on the server):</p>
+
+<ul>
+<li>Secure Shell: a Chrome extension, set to “open as window”, is my go-to
+SSH client to remote into remote development environments (public cloud for work, private home servers for personal projects)
+
+<ul>
+<li><strong>Public Service Announcement:</strong> since installing client-side certificates on Chromebooks are excruciatingly difficult, I resort to password-based SSH authentication for my servers. But if you do this, please do yourself a favor and enable Multi-Factor Authentication (MFA) for SSH (<a href="https://github.com/petermbenjamin/dotfiles/blob/master/duo/duo-pam.sh">DUO</a> is great!)<br /></li>
+</ul></li>
+<li>Tmux: terminal window and pane management</li>
+<li>Vim: editor</li>
+<li>Docker: further compartmentalized dev environments (e.g. <code>docker-compose up</code> and I&rsquo;ve got a local NGINX server, Ruby app server, &amp; postgresql server up and running)</li>
+</ul>
+
+<p>Here is the baseline software stack I use for hacking:</p>
+
+<ul>
+<li>Same as above, plus</li>
+<li>Termux: android-based terminal emulator for performing local testing when needed.</li>
+</ul>
+
+<p>And that&rsquo;s it. I have reached a point where all I need is a phone, a portable monitor, and a keyboard to be productive.</p>
+
+<p>And that&rsquo;s what this journey has been really all about: bringing technology back to its most basic set of needs for me to be effective and productive, where I am no longer physically or emotionally dependent on premium brushed aluminum computers with 16GB RAM just to run slack, chrome, and atom or vscode.</p>
+
+<h2 id="parting-thoughts">Parting Thoughts</h2>
+
+<p>I don&rsquo;t claim that this setup is for everyone. Admittedly, this setup falls apart when you have a hard requirement on a piece of software that is not available as a web app or if it is financially prohibitive as a web app.</p>
+
+<p>I am really excited about what the future of development might look like.</p>
+
+<p>Perhaps, in the not-so-distant-future, all you might need is the multi-core processing power already in your pocket, a Virtual Reality (VR) or Augmented Reality (AR) headset, with virtual workspaces (because, why be prohibitively limited by physical, costly monitors when you can just create unlimited number virtual monitors?)</p>
+
+<p>But, I&rsquo;m curious about your thoughts, opinions, or concerns about this setup or if you would like to share your setup.</p>
+
+<p>Thank you for your time.</p>
+
+<p>Cheers and happy coding! 🤗</p>
+
+    </div>
+    
+    <div class="disqus">
+        
+    </div>
+
+
+                
+                <div class="container">
+    <hr>
+</div>
+<div class="container has-text-centered top-pad">
+    <a href="#top">
+        <i class="fa fa-arrow-up"></i>
+    </a>
+</div>
+
+<div class="container">
+    <hr>
+</div>
+
+                <div class="section" id="footer">
+    <div class="container has-text-centered">
+    
+        <span class="footer-text">
+            <a href="https://github.com/vickylai/hugo-theme-introduction/"><strong>Introduction</strong></a> theme for <a href="http://gohugo.io/">Hugo</a>. Made with <a href="https://vickylai.com"><i class="fa fa-heart"></i> and <i class="fa fa-coffee"></i></a> by open source contributors.
+        </span>
+    
+    </div>
+</div>
+
+                
+            </div>
+        </section>
+        
+        
+
+
+<script src="https://petermbenjamin.github.io/js/bundle.baa2874a80b328e7dec720d3a90efc6efd25ccdf1611f37d9571354e88987590.js" integrity="sha256-uqKHSoCzKOfexyDTqQ78bv0lzN8WEfN9lXE1ToiYdZA="></script>
+
+
+
+        
+        
+        
+        
+    </body>
+</html>

@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        
+        <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+
+<title>
+Kubernetes Security Best Practices - Peter M. Benjamin
+</title>
+
+
+
+        <meta property="og:title" content="Kubernetes Security Best Practices - Peter M. Benjamin" />
+<meta property="og:type" content="website" />
+<meta property="og:description" content=""/>
+<meta property="og:url" content="https://petermbenjamin.github.io/blog/kubernetes-security-best-practices/"/>
+<meta property="og:site_name" content="Peter M. Benjamin"/>
+
+
+
+
+<meta property="og:image" content="https://petermbenjamin.github.io/home/profile.jpg"/>
+
+
+
+
+        
+<link rel="shortcut icon" href="/img/fav.ico">
+
+
+        
+
+
+
+
+
+<link rel="stylesheet" href="https://petermbenjamin.github.io/css/main.min.a64ad5ef43d264261f9b9449720a23201e20767a197d86e527fb49953c60e940.css" integrity="sha256-pkrV70PSZCYfm5RJcgojIB4gdnoZfYblJ/tJlTxg6UA=" crossorigin="anonymous" media="screen">
+
+
+
+
+    <link rel="stylesheet" href="https://petermbenjamin.github.io/css/all.min.css" integrity="" crossorigin="anonymous" media="screen">
+
+        
+        
+        
+        
+    </head>
+    <body>
+        <section id="top" class="section">
+            
+            <div class="container hero ">
+                
+
+    <h1 class="bold-title is-1">Blog</h1>
+
+
+            </div>
+            
+            <div class="section ">
+                
+<div class="container">
+    <hr>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        
+        <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false" >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+        <div class="navbar-menu " id="navMenu">
+            
+            
+            
+            
+            <a class="navbar-item" href="/">main</a>
+            
+
+            
+            
+            
+            
+            
+            <a class="navbar-item" href="/#about">About</a>
+            
+            
+            
+
+            
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="navbar-item" href="https://petermbenjamin.github.io/blog/">
+                
+                Back to Blog
+                
+            </a>
+            
+            
+            
+
+            
+            
+            <a class="navbar-item" href="/#contact">Contact</a>
+            
+            
+
+            
+            
+            
+
+            
+            <a class="navbar-item" href="https://petermbenjamin.github.io/index.xml"><i class="fas fa-rss"></i></a>
+            
+            
+        </div>
+    </nav>
+    <hr>
+</div>
+
+
+
+                
+    <div class="container">
+        <h2 class="title is-1 top-pad strong-post-title">
+            <a href="https://petermbenjamin.github.io/blog/kubernetes-security-best-practices/">Kubernetes Security Best Practices</a>
+        </h2>
+        <div class="post-data">
+            Jul 19, 2018 |
+            11 minutes read
+        </div>
+        
+        <div class="blog-share">
+            Share this:
+            
+            <a class="twitter-share-button" href="https://twitter.com/intent/tweet?text=Kubernetes%20Security%20Best%20Practices%20https%3a%2f%2fpetermbenjamin.github.io%2fblog%2fkubernetes-security-best-practices%2f" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fab fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+            
+            
+            
+            
+        </div>
+        
+        
+        
+        <p>
+            Tags:
+            
+            <a href="/tags/docker">docker</a>,
+            
+            <a href="/tags/kubernetes">kubernetes</a>,
+            
+            <a href="/tags/container">container</a>,
+            
+            <a href="/tags/security">security</a>
+            
+        </p>
+        
+    </div>
+    
+    <div class="container markdown top-pad">
+        
+
+<p><img src="https://www.logisticsmgmt.com/images/LM1710_SUP_Ocean_wideImage2.jpg" alt="cargo ship" /></p>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+
+<ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#secure-baseline">Secure Baseline</a></li>
+<li><a href="#authentication">Authentication</a></li>
+<li><a href="#authorization">Authorization</a></li>
+<li><a href="#admission-controls">Admission Controls</a></li>
+<li><a href="#impersonation">Impersonation</a></li>
+<li><a href="#pod-security-policies">Pod Security Policies</a></li>
+<li><a href="#network-policies">Network Policies</a></li>
+<li><a href="#additional-security">Additional Security Measures</a></li>
+<li><a href="#additional-references">Additional References</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+
+<h2 id="overview">Overview</h2>
+
+<p>So, you are all-in on container technology. You may be spinning up a container for your application and another container for the database locally on your machine, but then what? You need systems to build your containers. You need systems to deploy your containers. You need systems to run your containers. How would you manage containers at this scale?</p>
+
+<p>Enter, Kubernetes!</p>
+
+<p>Kubernetes is the new Application Server. Kubernetes provides an API interface for dev teams, ops teams, and even security teams to interact with applications and the platform.</p>
+
+<p>Kubernetes is a fast-moving open-source project with constant progress being made. So, my goal in this article is to cover some common security mistakes I have observed and offer some general best-practices around securing Kubernetes clusters and workloads.</p>
+
+<p><strong>Legend:</strong></p>
+
+<table>
+<thead>
+<tr>
+<th>Icon</th>
+<th>Meaning</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>❌</td>
+<td>Not Recommended</td>
+</tr>
+
+<tr>
+<td>🗒️</td>
+<td>Rationale</td>
+</tr>
+
+<tr>
+<td>✅</td>
+<td>Recommendation</td>
+</tr>
+
+<tr>
+<td>⚠️</td>
+<td>Warning</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="secure-baseline">Secure Baseline</h2>
+
+<p>✅ Ensure that your underlying hosts are hardened and secure. I recommend CIS benchmarks as a starting point.</p>
+
+<p>✅ Ensure that Docker itself is configured per security best-practices. Check out my previous article: <a href="https://dev.to/petermbenjamin/docker-security-best-practices-45ih">Docker Security Best-Practices</a></p>
+
+<p>✅ Ensure that you&rsquo;re starting off with Kubernetes with a secure baseline.
+  - Center for Internet Security (CIS) maintains <a href="https://downloads.cisecurity.org/">documentation</a> available for free.
+  - The fine folks at Aqua Security also open-sourced an automated checker based on CIS recommendations. Check it out: <a href="https://github.com/aquasecurity/kube-bench">kube-bench</a></p>
+
+<pre><code># recommended - on master node
+$ kubectl run                         \
+    --rm                              \
+    -it                               \
+    kube-bench-master                 \
+    --image=aquasec/kube-bench:latest \
+    --restart=Never                   \
+    --overrides=&quot;{ \&quot;apiVersion\&quot;: \&quot;v1\&quot;, \&quot;spec\&quot;: { \&quot;hostPID\&quot;: true, \&quot;nodeSelector\&quot;: { \&quot;kubernetes.io/role\&quot;: \&quot;master\&quot; }, \&quot;tolerations\&quot;: [ { \&quot;key\&quot;: \&quot;node-role.kubernetes.io/master\&quot;, \&quot;operator\&quot;: \&quot;Exists\&quot;, \&quot;effect\&quot;: \&quot;NoSchedule\&quot; } ] } }&quot;               \
+    -- master                         \
+    --version 1.8
+
+# recommended - on worker nodes
+$ kubectl run                         \
+    --rm                              \
+    -it                               \
+    kube-bench-node                   \
+    --image=aquasec/kube-bench:latest \
+    --restart=Never                   \
+    --overrides=&quot;{ \&quot;apiVersion\&quot;: \&quot;v1\&quot;, \&quot;spec\&quot;: { \&quot;hostPID\&quot;: true } }&quot; \
+    -- node                           \
+    --version 1.8
+</code></pre>
+
+<hr />
+
+<h2 id="authentication">Authentication</h2>
+
+<p>Most interactions with Kubernetes are done by talking to the control plane, specifically the <strong>kube-apiserver</strong> component of the control plane. Requests pass through 3 steps in the kube-apiserver before the request is served or rejected: Authentication, Authorization, and Admission Control. Once requests pass these 3 steps, kube-apiserver communicates with <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/">Kubelets</a> over the network. Therefore, Kubelets also have to check authentications and authorizations as well.</p>
+
+<p>The behavior of <code>kube-apiserver</code> and <code>kubelet</code> can be controlled or modified by launching them with certain command-line flags. The full list of supported command-line flags are documented here:
+  - <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/">kube-apiserver</a>
+  - <a href="https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/">kubelet</a></p>
+
+<p>Let&rsquo;s examine some common Kubernetes authentication security mistakes:</p>
+
+<p>❌ By default, anonymous authentication is enabled</p>
+
+<p>🗒️ Kubernetes allows anonymous authentication out-of-the-box. There are a combination of <code>kube-apiserver</code> settings that render anonymous authentication safe, like <a href="#authorization"><code>--authorization-mode=RBAC</code></a> because you would need to explicitly grant RBAC privileges to <code>system:anonymous</code> user and <code>system:unauthenticated</code> group.
+<strong>Note</strong>: Granting RBAC privileges to <code>*</code> user or <code>*</code> group do not include anonymous users.</p>
+
+<p>✅ Disable anonymous authentication by passing the <code>--anonymous-auth=false</code> flag</p>
+
+<pre><code># not recommended - on master node
+$ kube-apiserver       \
+    &lt;... other flags&gt;  \
+    --anonymous-auth=true
+
+# recommended - on master node
+$ kube-apiserver       \
+    &lt;... other flags&gt;  \
+    --anonymous-auth=false
+
+# not recommended - on worker nodes
+$ kubelet             \
+    &lt;... other flags&gt; \
+    --anonymous-auth=true
+
+# recommended - on worker nodes
+$ kubelet             \
+    &lt;... other flags&gt; \
+    --anonymous-auth=false
+</code></pre>
+
+<hr />
+
+<p>❌ Running <code>kube-apiserver</code> with <code>--insecure-port=&lt;PORT&gt;</code></p>
+
+<p>🗒️ In older versions of Kubernetes, you could run <code>kube-apiserver</code> with an API port that does not have any protections around it</p>
+
+<p>✅ Disable insecure port by passing the <code>--insecure-port=0</code> flag. In recent versions, this has been disabled by default with the intention of completely deprecating it</p>
+
+<pre><code># not recommended
+$ kube-apiserver         \
+    &lt;... other flags&gt;    \
+    --insecure-port=6443
+
+# recommended
+$ kube-apiserver      \
+    &lt;... other flags&gt; \
+    --insecure-port=0
+</code></pre>
+
+<hr />
+
+<p>✅ Prefer <strong>OpenID Connect</strong> or <strong>X509 Client Certificate</strong>-based authentication strategies over the others when authenticating users</p>
+
+<p>🗒️ Kubernetes supports different authentication strategies:
+  - <strong>X509 client certs</strong>: decent authentication strategy, but you&rsquo;d have to address renewing and redistributing client certs on a regular basis
+  - <strong>Static Tokens</strong>: avoid them due to their non-ephemeral nature
+  - <strong>Bootstrap Tokens</strong>: same as static tokens above
+  - <strong>Basic Authentication</strong>: avoid them due to credentials being transmitted over the network in cleartext
+  - <strong>Service Account Tokens</strong>: should not be used for end-users trying to interact with Kubernetes clusters, but they are the preferred authentication strategy for applications &amp; workloads running on Kubernetes
+  - <strong>OpenID Connect (OIDC) Tokens</strong>: best authentication strategy for end users as OIDC integrates with your identity provider (e.g. AD, AWS IAM, GCP IAM &hellip;etc)</p>
+
+<pre><code># recommended - OIDC
+$ kube-apiserver                                                        \
+    &lt;... other flags&gt;                                                   \
+    --oidc-issuer-url=&quot;https://domain/.well-known/openid-configuration&quot; \
+    --oidc-client-id=&quot;example&quot;
+
+# recommended - X509 cert
+$ kube-apiserver                               \
+    &lt;... other flags&gt;                          \
+    --client-ca-file=/path/to/ca.crt           \
+    --tls-cert-file=/path/to/server.crt        \
+    --tls-private-key-file=/path/to/server.key
+</code></pre>
+
+<hr />
+
+<h2 id="authorization">Authorization</h2>
+
+<p>❌ By default, authorization mode is to always authorize all requests to <code>kube-apiserver</code></p>
+
+<p>✅ Enable <a href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/">Role-Based Access Controls</a></p>
+
+<p>🗒️ Kubernetes supports different authorization strategies, but <strong>Role-Based Access Control</strong> (RBAC) was introduced in v1.8, which allows administrators to define what users and service accounts can or cannot do across Kubernetes clusters as a whole or within specific Kubernetes <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/">namespaces</a></p>
+
+<pre><code># not recommended
+$ kube-apiserver      \
+    &lt;... other flags&gt; \
+    --authorization-mode=AlwaysAllow
+
+# recommended
+$ kube-apiserver      \
+    &lt;... other flags&gt; \
+    --authorization-mode=RBAC
+</code></pre>
+
+<hr />
+
+<p>❌ By default, the <code>default</code> service account is automatically mounted into the file system of all containers in Kubernetes</p>
+
+<p>🗒️ The <code>default</code> service account is a valid service account token that can be used to query the Kubernetes API as an authenticated workload. With RBAC enabled, this is still a problem, but not as big as a problem as without RBAC enabled. Without RBAC, this token can be used to do virtually anything in the kubernetes cluster</p>
+
+<p>✅ Disable auto-mounting of the <code>default</code> service account token</p>
+
+<pre><code># recommended
+$ kubectl patch serviceaccount default -p &quot;automountServiceAccountToken: false&quot;
+</code></pre>
+
+<hr />
+
+<h2 id="admission-controls">Admission Controls</h2>
+
+<p>Admission controllers are pieces of code that intercept requests to the Kubernetes API in the 3rd and last step of the authentication/authorization process. The full list of admission control options are documented here:</p>
+
+<ul>
+<li><a href="https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/">Admission Controllers</a></li>
+</ul>
+
+<hr />
+
+<p>✅ Configure admission control to deny privilege escalation via launching interactive shells on or attaching to privileged containers</p>
+
+<p>🗒️ There are some valid use-cases where you need to run privileged containers to interact with the kernel of the underlying host, but this means users can potentially <code>kubectl attach</code> or <code>kubectl exec</code> into those privileged containers.</p>
+
+<pre><code># recommended
+kube-apiserver       \
+    &lt;...other flags&gt; \
+    --admission-control=...,DenyEscalatingExec
+</code></pre>
+
+<hr />
+
+<p>✅ Configure admission control to enable Pod Security Policies</p>
+
+<p>🗒️ Pod Security Policies are security rules that pods have to abide by in order to be accepted and scheduled on your cluster.</p>
+
+<p>⚠️ <strong>Make sure you have PodSecurityPolicy objects (i.e. yaml files) ready to be applied once you turn this on, otherwise no pod will be scheduled.</strong> See <a href="#pod-security-policy">Pod Security Policy</a> recommendation in this article for examples.</p>
+
+<pre><code># recommended
+$ kube-apiserver      \
+    &lt;... other flags&gt; \
+    --addmission-control=...,PodSecurityPolicy
+
+# example PodSecurityPolicy
+$ kubectl create -f- &lt;&lt;EOF 
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: example
+spec:
+  privileged: false  # Don't allow privileged pods!
+EOF
+
+# let's try to request a privileged pod to be scheduled on our cluster
+$ kubectl create -f- &lt;&lt;EOF
+apiVersion: v1
+kind: Pod
+metadata:
+  name:      pause
+spec:
+  containers:
+    - name:  pause
+      image: k8s.gcr.io/pause
+EOF
+
+# throws error as expected
+Error from server (Forbidden): error when creating &quot;STDIN&quot;: pods &quot;privileged&quot; is forbidden: unable to validate against any pod security policy: [spec.containers[0].securityContext.privileged: Invalid value: true: Privileged containers are not allowed]
+
+</code></pre>
+
+<hr />
+
+<p>✅ Configure admission control to always pull images</p>
+
+<p>🗒️ Kubernetes will cache container images that have been pulled from any registry (private or public). Any cached container images can be re-used by any pod on the cluster. Therefore, pods could gain unauthorized access to potentially sensitive information. Forcing Kubernetes to always pull images will require that the credentials needed to pull down images from private registries are provided by each requesting resource</p>
+
+<pre><code># recommended
+$ kube-apiserver      \
+    &lt;... other flags&gt; \
+    --admission-control=...,AlwaysPullImages
+</code></pre>
+
+<hr />
+
+<h2 id="impersonation">Impersonation</h2>
+
+<p>Kubernetes has a feature that allows any user to impersonate any other user on the Kubernetes cluster. This feature is nice for debugging, but can have unintended security implications if not controlled properly.</p>
+
+<p>To demonstrate the implications:</p>
+
+<pre><code>$ kubectl drain test-node
+Error from server (Forbidden): User &quot;foo&quot; cannot get nodes at the cluster scope. (get nodes test-node)
+
+$ kubectl drain test-node --as=admin --as-group=system:admins
+node &quot;test-node&quot; cordoned
+node &quot;test-node&quot; drained
+</code></pre>
+
+<p>You can read more about it here:</p>
+
+<ul>
+<li><a href="https://kubernetes.io/docs/reference/access-authn-authz/authentication/#user-impersonation">User Impersonation</a></li>
+</ul>
+
+<p>✅ Limit who can impersonate and what they can do as impersonated users</p>
+
+<pre><code># not recommended
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: impersonator
+rules:
+# allows users to impersonate any &quot;users&quot;, &quot;groups&quot;, and &quot;serviceaccounts&quot;
+- apiGroups: [&quot;&quot;]
+  resources: [&quot;users&quot;, &quot;groups&quot;, &quot;serviceaccounts&quot;]
+  verbs: [&quot;impersonate&quot;]
+
+
+# recommended
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: limited-impersonator
+rules:
+# Can impersonate the group &quot;developers&quot;
+- apiGroups: [&quot;&quot;]
+  resources: [&quot;groups&quot;]
+  verbs: [&quot;impersonate&quot;]
+  resourceNames: [&quot;developers&quot;]
+</code></pre>
+
+<hr />
+
+<h2 id="pod-security-policies">Pod Security Policies</h2>
+
+<p>Pod Security Policies define a set of conditions that a pod must abide by in order to be accepted into the system.</p>
+
+<p>✅ Disallow privileged containers</p>
+
+<pre><code>apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: restricted
+spec:
+  privileged: false
+</code></pre>
+
+<p>✅ Disallow sharing of the host process ID namespace
+⚠️ <strong>if <code>hostPID</code> is set to <code>true</code> and a container is granted the <code>SYS_PTRACE</code> capability, it is possible to escalate privileges outside the container</strong></p>
+
+<pre><code>apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: restricted
+spec:
+  hostPID: false
+</code></pre>
+
+<p>✅ Disallow sharing of the host IPC namespace (i.e. memory)</p>
+
+<pre><code>apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: restricted
+spec:
+  hostIPC: false
+</code></pre>
+
+<p>✅ Disallow sharing of the host network stack (i.e. access to loopback, localhost, snooping on network traffic on local node)</p>
+
+<pre><code>apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: restricted
+spec:
+  hostNetwork: false
+</code></pre>
+
+<p>✅ Whitelist allowable volume types</p>
+
+<pre><code>apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: restricted
+spec:
+  # It's recommended to allow the core volume types.
+  volumes:
+    - 'configMap'
+    - 'emptyDir'
+    - 'projected'
+    - 'secret'
+    - 'downwardAPI'
+    # Assume that persistentVolumes set up by the cluster admin are safe to use.
+    - 'persistentVolumeClaim'
+</code></pre>
+
+<p>✅ Require containers to run as non-root user</p>
+
+<pre><code>apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: restricted
+spec:
+  runAsUser:
+    # Require the container to run without root privileges.
+    rule: 'MustRunAsNonRoot'
+  supplementalGroups:
+    rule: 'MustRunAs'
+    ranges:
+      # Forbid adding the root group.
+      - min: 1
+        max: 65535
+</code></pre>
+
+<p>✅ Set the <code>defaultAllowPrivilegeEscalation</code> to <code>false</code></p>
+
+<pre><code>apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: restricted
+spec:
+  defautlAllowPrivilegeEscalation: false
+</code></pre>
+
+<p>✅ Apply Security Enhanced Linux (<code>seLinux</code>), <code>seccomp</code>, or <code>apparmor</code> profiles</p>
+
+<pre><code>apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: restricted
+  annotations:
+    # applying default seccomp and apparmor profiles
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: 'docker/default'
+    apparmor.security.beta.kubernetes.io/allowedProfileNames: 'runtime/default'
+    seccomp.security.alpha.kubernetes.io/defaultProfileName:  'docker/default'
+    apparmor.security.beta.kubernetes.io/defaultProfileName:  'runtime/default'
+</code></pre>
+
+<h3 id="full-pod-security-policy-example">Full Pod Security Policy Example</h3>
+
+<pre><code>apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: restricted
+  annotations:
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: 'docker/default'
+    apparmor.security.beta.kubernetes.io/allowedProfileNames: 'runtime/default'
+    seccomp.security.alpha.kubernetes.io/defaultProfileName:  'docker/default'
+    apparmor.security.beta.kubernetes.io/defaultProfileName:  'runtime/default'
+spec:
+  privileged: false
+  # Required to prevent escalations to root.
+  defautlAllowPrivilegeEscalation: false
+  # This is redundant with non-root + disallow privilege escalation,
+  # but we can provide it for defense in depth.
+  requiredDropCapabilities:
+    - ALL
+  # Allow core volume types.
+  volumes:
+    - 'configMap'
+    - 'emptyDir'
+    - 'projected'
+    - 'secret'
+    - 'downwardAPI'
+    # Assume that persistentVolumes set up by the cluster admin are safe to use.
+    - 'persistentVolumeClaim'
+  hostNetwork: false
+  hostIPC: false
+  hostPID: false
+  runAsUser:
+    # Require the container to run without root privileges.
+    rule: 'MustRunAsNonRoot'
+  seLinux:
+    # This policy assumes the nodes are using AppArmor rather than SELinux.
+    rule: 'RunAsAny'
+  supplementalGroups:
+    rule: 'MustRunAs'
+    ranges:
+      # Forbid adding the root group.
+      - min: 1
+        max: 65535
+  fsGroup:
+    rule: 'MustRunAs'
+    ranges:
+      # Forbid adding the root group.
+      - min: 1
+        max: 65535
+  readOnlyRootFilesystem: false
+</code></pre>
+
+<hr />
+
+<h2 id="network-policies">Network Policies</h2>
+
+<p>Kubernetes allows users to deploy their choice of network add-ons.</p>
+
+<p>✅ Choose a network add-on that allows you to leverage Network Policies, like <a href="https://docs.projectcalico.org/v3.1/introduction/">Calico</a> or <a href="https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/flannel">Canal</a>, which gives you networking via Flannel and network policies via Calico.</p>
+
+<pre><code># Canal Example 
+$ kube-apiserver                 \
+    &lt;... other flags&gt;            \
+    --cluster-cidr=10.244.0.0/16 \
+    --allocate-node-cidrs=true
+
+# install RBAC
+$ kubectl apply -f \
+    https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/canal/rbac.yaml
+
+# install Calico
+$ kubectl apply -f \
+    https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/canal/canal.yaml
+</code></pre>
+
+<h2 id="additional-security-measures">Additional Security Measures</h2>
+
+<p>All recommendations up to this point are just to get you up and running.
+In this section, I am going to cover some additional security measures!</p>
+
+<p>✅ Kubernetes <a href="https://kubernetes.io/docs/concepts/configuration/secret/">Secrets</a> are useful for some limited use-cases. I wouldn&rsquo;t rely on it as a secrets management solution. Instead, consider Hashicorp <a href="https://www.vaultproject.io/">Vault</a> for that.</p>
+
+<p>✅ Continuously scan for security vulnerabilities in your containers with <a href="https://anchore.com/">Anchore</a> or <a href="https://coreos.com/clair/docs/latest/">Clair</a>.</p>
+
+<p>✅ Keep your infrastructure up-to-date on security patches, or run Kubernetes on OSes that keep themselves up-to-date (e.g. CoreOS)</p>
+
+<p>✅ Only deploy authorized container images that you&rsquo;ve analyzed, scanned, and signed (i.e. Software Supply Chain Security). <a href="https://grafeas.io/">Grafeas</a>, <a href="https://github.com/theupdateframework/tuf">TUF</a>, and <a href="https://github.com/theupdateframework/notary">Notary</a> can help here.</p>
+
+<p>✅ Limit direct access to the Kubernetes nodes.</p>
+
+<p>✅ Avoid noisy neighbor problems. Define resource quotas.</p>
+
+<p>✅ Monitor and log everything with Prometheus and Grafana. <a href="https://github.com/draios/falco">Sysdig Falco</a> will detect and alert on anomalous container behavior, like shell execution in a container, container privilege escalation, spawning of unexpected child processes, mounting sensitive paths, system binaries making network connections &hellip;etc</p>
+
+<hr />
+
+<h2 id="additional-references">Additional References</h2>
+
+<ul>
+<li><a href="https://kubernetes.io/docs/tasks/administer-cluster/securing-a-cluster/">Securing a Cluster</a></li>
+<li><a href="https://kubernetes.io/blog/2016/08/security-best-practices-kubernetes-deployment/">Security Best Practices for Kubernetes Deployments</a></li>
+<li><a href="https://github.com/freach/kubernetes-security-best-practice">Kubernetes Security Best-Practice</a></li>
+</ul>
+
+<hr />
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Containers and Orchestrators are not inherently more or less secure than traditional virtualization technologies. If anything, I personally think containers and orchestrators have the potential to revolutionize the security industry and truly enable <em>Security at the speed of DevOps</em>.</p>
+
+<p>If you feel like I missed something, got some details wrong, or just want to say hi, please feel free to leave a comment below or reach out to me on <a href="https://github.com/petermbenjamin/ama">GitHub 🐙</a>, <a href="https://twitter.com/petermbenjamin">Twitter 🐦</a>, or <a href="https://www.linkedin.com/in/pmbenjamin">LinkedIn 🔗</a></p>
+
+    </div>
+    
+    <div class="disqus">
+        
+    </div>
+
+
+                
+                <div class="container">
+    <hr>
+</div>
+<div class="container has-text-centered top-pad">
+    <a href="#top">
+        <i class="fa fa-arrow-up"></i>
+    </a>
+</div>
+
+<div class="container">
+    <hr>
+</div>
+
+                <div class="section" id="footer">
+    <div class="container has-text-centered">
+    
+        <span class="footer-text">
+            <a href="https://github.com/vickylai/hugo-theme-introduction/"><strong>Introduction</strong></a> theme for <a href="http://gohugo.io/">Hugo</a>. Made with <a href="https://vickylai.com"><i class="fa fa-heart"></i> and <i class="fa fa-coffee"></i></a> by open source contributors.
+        </span>
+    
+    </div>
+</div>
+
+                
+            </div>
+        </section>
+        
+        
+
+
+<script src="https://petermbenjamin.github.io/js/bundle.baa2874a80b328e7dec720d3a90efc6efd25ccdf1611f37d9571354e88987590.js" integrity="sha256-uqKHSoCzKOfexyDTqQ78bv0lzN8WEfN9lXE1ToiYdZA="></script>
+
+
+
+        
+        
+        
+        
+    </body>
+</html>

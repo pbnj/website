@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        
+        <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+
+<title>
+Docker Security Best Practices - Peter M. Benjamin
+</title>
+
+
+
+        <meta property="og:title" content="Docker Security Best Practices - Peter M. Benjamin" />
+<meta property="og:type" content="website" />
+<meta property="og:description" content=""/>
+<meta property="og:url" content="https://petermbenjamin.github.io/blog/docker-security-best-practices/"/>
+<meta property="og:site_name" content="Peter M. Benjamin"/>
+
+
+
+
+<meta property="og:image" content="https://petermbenjamin.github.io/home/profile.jpg"/>
+
+
+
+
+        
+<link rel="shortcut icon" href="/img/fav.ico">
+
+
+        
+
+
+
+
+
+<link rel="stylesheet" href="https://petermbenjamin.github.io/css/main.min.a64ad5ef43d264261f9b9449720a23201e20767a197d86e527fb49953c60e940.css" integrity="sha256-pkrV70PSZCYfm5RJcgojIB4gdnoZfYblJ/tJlTxg6UA=" crossorigin="anonymous" media="screen">
+
+
+
+
+    <link rel="stylesheet" href="https://petermbenjamin.github.io/css/all.min.css" integrity="" crossorigin="anonymous" media="screen">
+
+        
+        
+        
+        
+    </head>
+    <body>
+        <section id="top" class="section">
+            
+            <div class="container hero ">
+                
+
+    <h1 class="bold-title is-1">Blog</h1>
+
+
+            </div>
+            
+            <div class="section ">
+                
+<div class="container">
+    <hr>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        
+        <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false" >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+        <div class="navbar-menu " id="navMenu">
+            
+            
+            
+            
+            <a class="navbar-item" href="/">main</a>
+            
+
+            
+            
+            
+            
+            
+            <a class="navbar-item" href="/#about">About</a>
+            
+            
+            
+
+            
+            
+            
+            
+
+            
+            
+            
+            
+            <a class="navbar-item" href="https://petermbenjamin.github.io/blog/">
+                
+                Back to Blog
+                
+            </a>
+            
+            
+            
+
+            
+            
+            <a class="navbar-item" href="/#contact">Contact</a>
+            
+            
+
+            
+            
+            
+
+            
+            <a class="navbar-item" href="https://petermbenjamin.github.io/index.xml"><i class="fas fa-rss"></i></a>
+            
+            
+        </div>
+    </nav>
+    <hr>
+</div>
+
+
+
+                
+    <div class="container">
+        <h2 class="title is-1 top-pad strong-post-title">
+            <a href="https://petermbenjamin.github.io/blog/docker-security-best-practices/">Docker Security Best Practices</a>
+        </h2>
+        <div class="post-data">
+            Jul 19, 2018 |
+            5 minutes read
+        </div>
+        
+        <div class="blog-share">
+            Share this:
+            
+            <a class="twitter-share-button" href="https://twitter.com/intent/tweet?text=Docker%20Security%20Best%20Practices%20https%3a%2f%2fpetermbenjamin.github.io%2fblog%2fdocker-security-best-practices%2f" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fab fa-twitter"></i>
+                <span class="hidden">Twitter</span>
+            </a>
+            
+            
+            
+            
+        </div>
+        
+        
+        
+        <p>
+            Tags:
+            
+            <a href="/tags/docker">docker</a>,
+            
+            <a href="/tags/kubernetes">kubernetes</a>,
+            
+            <a href="/tags/container">container</a>,
+            
+            <a href="/tags/security">security</a>
+            
+        </p>
+        
+    </div>
+    
+    <div class="container markdown top-pad">
+        
+
+<p><img src="https://upload.wikimedia.org/wikipedia/en/4/41/Stefan_Beese%27s_Eco_Shipping_Container_Lounge_by_Melissa_Carrier.jpg" alt="container" /></p>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+
+<ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#the-host">The Host</a></li>
+<li><a href="#docker-harden">Docker Hardening Standard</a></li>
+<li><a href="#docker-engine">Docker Engine</a></li>
+<li><a href="#container-privileges">Container Privileges</a></li>
+<li><a href="#static-analysis">Static Analysis</a></li>
+<li><a href="#runtime-security">Runtime Security</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+
+<h2 id="overview">Overview</h2>
+
+<p>Containers have revolutionized the tech industry in recent years for many reasons. Because of their properties of encapsulating dependencies into a portable container image, many organizations have adopted them as the primary method of developing, building, and deploying production applications.</p>
+
+<p>As a Software Engineer and a Security Engineer, I cannot even begin to express my excitement for the game-changing potential of containers and orchestrators, namely Kubernetes. However, due to the chaotic (good) nature of open-source and the speed by which projects move and evolve, many organizations are simply unable or unequipped to properly secure these technologies.</p>
+
+<p>This article aims to provide a list of common security mistakes and security best-practices/recommendations in 2018.</p>
+
+<p>In the next article, I will offer the same insights for Kubernetes.</p>
+
+<p><strong>Legend:</strong></p>
+
+<table>
+<thead>
+<tr>
+<th align="right">Icon</th>
+<th align="left">Meaning</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="right">❌</td>
+<td align="left">Not Recommended</td>
+</tr>
+
+<tr>
+<td align="right">🗒️</td>
+<td align="left">Rationale</td>
+</tr>
+
+<tr>
+<td align="right">✅</td>
+<td align="left">Recommendation</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h2 id="the-host">The Host</h2>
+
+<p>❌ Running Docker on an unsecured, unhardened host</p>
+
+<p>🗒️ Docker is only as secure as the underlying host</p>
+
+<p>✅ Make sure you follow <a href="https://downloads.cisecurity.org/">OS security best-practices</a> to harden your infrastructure. If you dole out <code>root</code> access to every user in your organization, then it doesn&rsquo;t matter how secure Docker is.</p>
+
+<hr />
+
+<h2 id="docker-hardening-standard">Docker Hardening Standard</h2>
+
+<p>✅ The Center for Internet Security (CIS) puts out documents detailing security best-practices, recommendations, and actionable steps to achieve a hardened baseline. The best part: <a href="https://downloads.cisecurity.org/download-issues/benchmarks">they&rsquo;re free</a>.</p>
+
+<p>✅ Better yet, <a href="https://github.com/docker/docker-bench-security">docker-bench-security</a> is an automated checker based on the CIS benchmarks.</p>
+
+<pre><code># recommended
+$ docker run \
+    -it \
+    --net host \
+    --pid host \
+    --userns host \
+    --cap-add audit_control \
+    -e DOCKER_CONTENT_TRUST=$DOCKER_CONTENT_TRUST \
+    -v /var/lib:/var/lib \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v /usr/lib/systemd:/usr/lib/systemd \
+    -v /etc:/etc --label docker_bench_security \
+    docker/docker-bench-security
+</code></pre>
+
+<hr />
+
+<h2 id="docker-engine">Docker Engine</h2>
+
+<p>Docker Engine is an API that listens for incoming requests and, in turn, interfaces with the underlying host kernel to accomplish its job. Docker Engine supports communications on 3 different sockets: <code>unix</code>, <code>tcp</code>, and <code>fd</code>.</p>
+
+<p>❌ Running Docker Engine (aka the Docker daemon, aka <code>dockerd</code>) on <code>tcp</code> or any networked socket</p>
+
+<p>🗒️ If anyone can reach the networked socket that Docker is listening on, they potentially have access to Docker and, since Docker needs to run as root, to the underlying host</p>
+
+<p>✅ The default docker behavior today is the safest assumption, which is to listen on a <code>unix</code> socket</p>
+
+<pre><code># not recommended
+$ dockerd -H &quot;tcp://1.2.3.4:8080&quot;
+
+# recommended
+$ dockerd -H &quot;unix:///var/run/docker.sock&quot;
+</code></pre>
+
+<hr />
+
+<p>❌ Mounting the Docker socket into the container</p>
+
+<p>🗒️ Mounting <code>/var/run/docker.sock</code> inside the container is a common, yet very dangerous practice. An attacker can execute any command that the docker service can run, which generally provides access to the whole host system as the docker service runs as root.</p>
+
+<p>✅ Short of just saying &ldquo;Don&rsquo;t mount the docker socket&rdquo;, carefully consider the use-cases that require this giant loophole. For example, many tutorials for running a Jenkins master in a container will instruct you to mount the docker socket so that Jenkins can spin up other containers to run your tests in. This is dangerous as that means anyone can execute any shell commands from Jenkins to gain unauthorized access to sensitive information or secrets (e.g. API tokens, environment variables) from other containers, or launch privileged containers and mount <code>/etc/shadow</code> to extract all users&rsquo; passwords.</p>
+
+<pre><code># not recommended
+$ docker run -it -v /var/run/docker.sock:/var/run/docker.sock ubuntu /bin/bash
+</code></pre>
+
+<hr />
+
+<h2 id="container-privileges">Container Privileges</h2>
+
+<p>❌ Running privileged containers</p>
+
+<p>🗒️ Containers would have full access to the underlying host</p>
+
+<p>✅ If needed by a container, grant it only the specific capabilities that it needs</p>
+
+<pre><code># not recommended
+$ docker run -d --privileged ubuntu
+
+# recommended
+$ docker run -d --cap-add SYS_PTRACE ubuntu
+</code></pre>
+
+<hr />
+
+<p>❌ Running containers as root users</p>
+
+<p>🗒️ This is a system administration standard best-practice. There is little to no reason for running software in containers as <code>root</code>.</p>
+
+<p>✅ Run containers as non-root users</p>
+
+<pre><code># not recommended (runtime example)
+$ docker run -d ubuntu sleep infinity
+$ ps aux | grep sleep
+root ... sleep infinity
+
+# recommended (runtime example)
+$ docker run -d -u 1000 ubuntu sleep infinity
+$ ps aux | grep sleep
+1000 ... sleep infinity
+
+# recommended (build-time example)
+FROM ubuntu:latest
+USER 1000
+</code></pre>
+
+<hr />
+
+<h2 id="static-analysis">Static Analysis</h2>
+
+<p>❌ Pulling and running containers from public registries</p>
+
+<p>🗒️ Recently, security researchers found 17 cryptomining containers on Docker Hub</p>
+
+<p>✅ Scan container images to detect and prevent containers with known vulnerabilities or malicious packages from getting deployed on your infrastructure
+  - Open source tools in this space are <a href="https://anchore.com/">anchore</a> and <a href="https://github.com/coreos/clair">clair</a></p>
+
+<hr />
+
+<p>✅ Sign container images
+  - <a href="https://docs.docker.com/engine/security/trust/content_trust/">Docker Content Trust</a> guarantees the integrity of the publisher and the integrity of the contents of a container image, thus establishing trust</p>
+
+<hr />
+
+<h2 id="runtime-security">Runtime Security</h2>
+
+<p>✅ Attach <code>seccomp</code>, <code>apparmor</code>, or <code>selinux</code> profiles to your containers
+  - Security profiles, like <a href="https://docs.docker.com/engine/security/seccomp/"><code>seccomp</code></a>, <a href="https://docs.docker.com/engine/security/apparmor/"><code>apparmor</code></a>, and <code>selinux</code> add stronger security boundaries around the container to prevent it for making a SYSCALL it is not explicitly allowed to make</p>
+
+<hr />
+
+<p>✅ Monitor, detect, and alert on anomalous, suspicious, and malicious container behavior
+  - Open source tools in this space include <a href="https://github.com/draios/falco">Sysdig Falco</a></p>
+
+<hr />
+
+<p>✅ Consider running containers in a container runtime sandbox, like <a href="https://github.com/google/gvisor">gvisor</a>
+  - Container runtime sandbox add an even stronger security boundary around your containers at runtime</p>
+
+<hr />
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Container technology is not inherently more or less secure than traditional virtualization technologies. Containers are enabled by Linux features, such as namespace isolation and cgroups to control to control system resources. Securing container workloads and the systems underneath them require an understanding of Linux as a platform.</p>
+
+    </div>
+    
+    <div class="disqus">
+        
+    </div>
+
+
+                
+                <div class="container">
+    <hr>
+</div>
+<div class="container has-text-centered top-pad">
+    <a href="#top">
+        <i class="fa fa-arrow-up"></i>
+    </a>
+</div>
+
+<div class="container">
+    <hr>
+</div>
+
+                <div class="section" id="footer">
+    <div class="container has-text-centered">
+    
+        <span class="footer-text">
+            <a href="https://github.com/vickylai/hugo-theme-introduction/"><strong>Introduction</strong></a> theme for <a href="http://gohugo.io/">Hugo</a>. Made with <a href="https://vickylai.com"><i class="fa fa-heart"></i> and <i class="fa fa-coffee"></i></a> by open source contributors.
+        </span>
+    
+    </div>
+</div>
+
+                
+            </div>
+        </section>
+        
+        
+
+
+<script src="https://petermbenjamin.github.io/js/bundle.baa2874a80b328e7dec720d3a90efc6efd25ccdf1611f37d9571354e88987590.js" integrity="sha256-uqKHSoCzKOfexyDTqQ78bv0lzN8WEfN9lXE1ToiYdZA="></script>
+
+
+
+        
+        
+        
+        
+    </body>
+</html>
