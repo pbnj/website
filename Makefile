@@ -41,3 +41,8 @@ dev: ## runs dev container
 	--workdir /www \
 	--user $(id -u):$(id -g) \
 	website:dev
+
+.PHONY: setup
+setup: ## sets up dependencies
+	git clone https://github.com/petermbenjamin/petermbenjamin.github.io public/
+	git clone https://github.com/victoriadotdev/hugo-theme-introduction themes/introduction/
