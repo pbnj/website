@@ -1,10 +1,8 @@
 ---
 title: "About"
 weight: 1
-image: https://github.com/petermbenjamin.png
+image: profile.jpg
 ---
-
-Peter has a deep technical background in the Go programming language, Kubernetes, and Docker. Peter is involved in the community as a Kubernetes contributor, blogger, and a co-organizer for the San Diego Kubernetes and the San Diego Golang meet-ups. 
 
 Peter Benjamin is a Software Engineer and a Developer Advocate, focusing on infrastructure, Kubernetes, Security, and DevOps at [Teradata](https://www.teradata.com/).
 Formerly, Peter was a Security Engineer at [Symantec](https://www.symantec.com/) and [Intuit](http://www.intuit.com/).
