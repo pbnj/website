@@ -2,4 +2,4 @@
 resources/
 .DS_Store
 public/*
-themes/introduction/*
+themes/*
