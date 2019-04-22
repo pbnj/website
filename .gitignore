@@ -1,5 +1,5 @@
 *.swp
 resources/
 .DS_Store
-public/
-themes/introduction/
+public/*
+themes/introduction/*
