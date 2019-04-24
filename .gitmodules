@@ -1,0 +1,6 @@
+[submodule "public"]
+	path = public
+	url = git@github.com:petermbenjamin/petermbenjamin.github.io
+[submodule "themes/introduction"]
+	path = themes/introduction
+	url = https://github.com/victoriadotdev/hugo-theme-introduction
