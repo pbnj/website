@@ -20,7 +20,7 @@ introHeight = "large"
 showLatest = true
 showAllPosts = true
 numberOfProjectsToShow = 3
-localTime = true
+#localTime = true
 timeZone = "America/Los_Angeles"
 
 [params.projects]

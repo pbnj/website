@@ -44,5 +44,4 @@ dev: ## runs dev container
 
 .PHONY: setup
 setup: ## sets up dependencies
-	git clone https://github.com/petermbenjamin/petermbenjamin.github.io public/
-	git clone https://github.com/victoriadotdev/hugo-theme-introduction themes/introduction/
+	git submodule update --init --recursive
