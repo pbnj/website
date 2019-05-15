@@ -1,5 +1,5 @@
 ---
-title: "Kind"
+title: "Kubernetes in Docker"
 date: 2019-05-12T15:50:38-07:00
 draft: true
 ---
