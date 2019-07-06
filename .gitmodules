@@ -1,9 +1,6 @@
 [submodule "public"]
 	path = public
 	url = git@github.com:petermbenjamin/petermbenjamin.github.io
-[submodule "themes/introduction"]
-	path = themes/introduction
-	url = https://github.com/victoriadotdev/hugo-theme-introduction
 [submodule "themes/simple"]
 	path = themes/simple
 	url = https://github.com/Xzya/simple-hugo-theme
