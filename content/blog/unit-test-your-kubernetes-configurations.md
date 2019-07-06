@@ -1,21 +1,22 @@
 ---
-title: "Unit Test Your Kubernetes Configurations"
+author: "Peter Benjamin"
+title: "Unit Testing Kubernetes Manifests"
 date: 2019-05-21T08:29:03-07:00
+tags: ["kubernetes", "security", "configuration", "unit testing"]
+categories: ["kubernetes", "security", "development"]
 draft: true
 ---
 
 ## Table of Content
 
-<!-- vim-markdown-toc GFM -->
-
+<!-- toc -->
 - [Introduction](#introduction)
 - [What is conftest?](#what-is-conftest)
 - [Demo](#demo)
   - [Prerequisites](#prerequisites)
   - [Setup](#setup)
   - [Test](#test)
-
-<!-- vim-markdown-toc -->
+<!-- /toc -->
 
 ## Introduction
 

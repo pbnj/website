@@ -3,58 +3,48 @@ languageCode = "en-us"
 title = "Peter M. Benjamin"
 DefaultContentLanguage = "en"
 publishDir = "public/"
-theme = "introduction" # https://github.com/vickylai/hugo-theme-introduction
+theme = "simple" # https://github.com/Xzya/simple-hugo-theme
 
-[params]
-themeStyle = "light"
-favicon = "/img/fav.ico"
-showRSSButton = true
-fadeIn = false
-fadeInIndex = true
-dateFormat = "Jan 2, 2006"
-email = "petermbenjamin@gmail.com"
-customCSS = ["css/all.min.css"] # latest font-awesome v5.6.3
+copyright = "© 2019 — Peter M. Benjamin — All rights reserved."
 
-[params.home]
-introHeight = "large"
-showLatest = true
-showAllPosts = true
-numberOfProjectsToShow = 3
-#localTime = true
-timeZone = "America/Los_Angeles"
+# Highlighting
+pygmentsCodefences = true
+pygmentsCodeFencesGuessSyntax = true
+pygmentsoptions = "linenos=table"
+pygmentsStyle = "vs"
 
-[params.projects]
-useTwoColumns = false
+# Taxonomies
+[taxonomies]
+  tag = "tags"
+  category = "categories"
 
-[params.share]
-twitter = true
-linkedin = true
+# Menu
+[menu]
+  # Header
+  [[menu.main]]
+    url = "/blog/"
+    name = "blog"
+    weight = 1
+  [[menu.main]]
+    url = "/contact/"
+    name = "contact"
+    weight = 2
 
-[[params.social]]
-url   = "https://twitter.com/petermbenjamin"
-icon  = "twitter"
-icon_pack = "fab"
-[[params.social]]
-url   = "https://github.com/petermbenjamin"
-icon  = "github"
-icon_pack = "fab"
-[[params.social]]
-url = "https://dev.to/petermbenjamin"
-icon = "dev"
-icon_pack = "fab"
-[[params.social]]
-url = "https://medium.com/@petermbenjamin"
-icon = "medium"
-icon_pack = "fab"
-[[params.social]]
-url = "https://keybase.io/pbenj"
-icon = "keybase"
-icon_pack = "fab"
-[[params.social]]
-url   = "https://linkedin.com/in/pmbenjamin"
-icon  = "linkedin-in"
-icon_pack = "fab"
-[[params.social]]
-url = "mailto:petermbenjamin@gmail.com"
-icon = "envelope"
-icon_pack = "fas"
+  # Footer
+  [[menu.footer]]
+    url = "https://github.com/petermbenjamin"
+    name = "GitHub"
+    weight = 1
+  [[menu.footer]]
+    url = "/posts/index.xml"
+    name = "RSS"
+    weight = 2
+  [[menu.footer]]
+    url = "mailto:petermbenjamin@gmail.com"
+    name = "Contact"
+    weight = 3
+
+
+# Links format
+[permalinks]
+  posts = "/posts/:year/:month/:title/"

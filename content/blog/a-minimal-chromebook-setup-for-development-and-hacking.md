@@ -2,22 +2,25 @@
 title: "A Minimal Chromebook Setup for Development and Hacking"
 date: 2018-05-06T12:20:33-08:00
 tags: ["chromebook", "development", "hacking", "minimal"]
+categories: ["development"]
 ---
 
 ## Table of Contents
 
-* [The TLDR Version](#the-tldr-version)
-* [Introduction](#introduction)
-* [The SOLID Principles](#the-solid-principles)
-	* [Security](#security)
-	* [Ownership Cost](#ownership-cost)
-	* [Leverage Native Capabilities](#leverage-native-capabilities)
-	* [Inherent Restrictions](#inherent-restrictions)
-	* [Developer Experience](#developer-experience)
-* [The Details](#the-details)
-	* [Hardware](#hardware)
-	* [Software](#software)
-* [Parting Thoughts](#parting-thoughts)
+<!-- toc -->
+- [The TLDR Version](#the-tldr-version)
+- [Introduction](#introduction)
+- [The SOLID Principles](#the-solid-principles)
+  - [Security](#security)
+  - [Ownership Cost](#ownership-cost)
+  - [Leverage Native Capabilities](#leverage-native-capabilities)
+  - [Inherent Restrictions](#inherent-restrictions)
+  - [Developer Experience](#developer-experience)
+- [The Details](#the-details)
+  - [Hardware](#hardware)
+  - [Software](#software)
+- [Parting Thoughts](#parting-thoughts)
+<!-- /toc -->
 
 ## The TLDR Version
 

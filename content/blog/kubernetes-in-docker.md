@@ -1,18 +1,18 @@
 ---
 title: "Kubernetes in Docker"
 date: 2019-05-12T15:50:38-07:00
+tags: ["kubernetes", "docker", "container", "development"]
+categories: ["development", "kubernetes"]
 draft: true
 ---
 
 ## Table of Contents
 
-<!-- vim-markdown-toc GFM -->
-
+<!-- toc -->
 - [Introduction](#introduction)
 - [What is kind?](#what-is-kind)
 - [What can we do with kind?](#what-can-we-do-with-kind)
-
-<!-- vim-markdown-toc -->
+<!-- /toc -->
 
 ## Introduction
 

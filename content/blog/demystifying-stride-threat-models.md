@@ -2,10 +2,12 @@
 title: "Demystifying Stride Threat Models"
 date: 2018-08-18T10:57:56-08:00
 tags: ["security", "threat models", "stride", "application security"]
+categories: ["security", "application security"]
 ---
 
 ## Table of Contents
 
+<!-- toc -->
 - [Introduction](#introduction)
 - [What is a Threat Model?](#what-is-a-threat-model)
 - [What is STRIDE?](#what-is-stride)
@@ -17,6 +19,9 @@ tags: ["security", "threat models", "stride", "application security"]
   - [Elevation of Privileges](#elevation-of-privileges)
 - [Summary](#summary)
 - [Additional Resources](#additional-resources)
+- [Footnotes](#footnotes)
+- [Updates](#updates)
+<!-- /toc -->
 
 ## Introduction
 
@@ -36,7 +41,7 @@ With that out of the way, the simplest explanation in English is this:
 
 _Threat Models are a systematic and structured way to identify and mitigate security risks in our software_.
 
-There are various ways and methodologies of doing threat models, one of which is a process popularized by Microsoft, called _STRIDE_. 
+There are various ways and methodologies of doing threat models, one of which is a process popularized by Microsoft, called _STRIDE_.
 
 ## What is STRIDE?
 
@@ -46,8 +51,6 @@ Each category of risk aims to address one aspect of security.
 
 Let's dive into each of these categories.
 
----
-
 ### Spoofing
 
 Spoofing refers to the act of posing as someone else (i.e. spoofing a user) or claiming a false identity (i.e. spoofing a process).
@@ -56,12 +59,10 @@ This category is concerned with **authenticity**.
 
 Examples:
 
-- One user spoofs the identify of another user by brute-forcing username/password credentials. 
-- A malicious, phishing host is set up in an attempt to trick users into divulging their credentials. 
+- One user spoofs the identify of another user by brute-forcing username/password credentials.
+- A malicious, phishing host is set up in an attempt to trick users into divulging their credentials.
 
 You would typically mitigate these risks with proper [authentication](https://www.owasp.org/index.php/Authentication_Cheat_Sheet).
-
----
 
 ### Tampering
 
@@ -82,8 +83,6 @@ You would typically mitigate these risks with:
 - Integrate with security static code analysis tools to identify security bugs.
 - Integrate with composition analysis tools (e.g. `snyk`, `npm audit`, BlackDuck ...etc) to identify 3rd party libraries/dependencies with known security vulnerabilities.
 
----
-
 ### Repudiation
 
 Repudiation refers to the ability of denying that an action or an event has occurred.
@@ -97,8 +96,6 @@ Examples:
 - Administrators unable to determine if a container has started to behave suspiciously/erratically.
 
 You would typically mitigate these risks with proper [audit logging](https://www.computerweekly.com/tip/Best-practices-for-audit-log-review-for-IT-security-investigations).
-
----
 
 ### Information Disclosure
 
@@ -118,8 +115,6 @@ You would typically mitigate these risks by:
 - Implementing proper [encryption](https://www.owasp.org/index.php/Cryptographic_Storage_Cheat_Sheet).
 - Avoiding self-signed certificates. Use a valid, trusted Certificate Authority (CA).
 
----
-
 ### Denial of Service
 
 Denial of Service refers to causing a service or a network resource to be unavailable to its intended users.
@@ -130,15 +125,13 @@ Examples:
 
 - A user performs [SYN flood](https://en.wikipedia.org/wiki/SYN_flood) attack.
 - The storage (i.e. disk, drive) becomes too full.
-- A Kubernetes dashboard is left exposed on the Internet, allowing anyone to deploy containers on your company's infrastructure to mine cryptocurrency and starve your legitimate applications of CPU. [Yes, that happened too](https://redlock.io/blog/cryptojacking-tesla). 
+- A Kubernetes dashboard is left exposed on the Internet, allowing anyone to deploy containers on your company's infrastructure to mine cryptocurrency and starve your legitimate applications of CPU. [Yes, that happened too](https://redlock.io/blog/cryptojacking-tesla).
 
-Mitigating this class of security risks is tricky because solutions are highly dependent on a lot of factors. 
+Mitigating this class of security risks is tricky because solutions are highly dependent on a lot of factors.
 
 For the Kubernetes example, you would mitigate resource consumption with [resource quotas](https://kubernetes.io/docs/concepts/policy/resource-quotas/).
 
 For a storage example, you would mitigate this with proper log rotation and monitoring/alerting when disk is nearing capacity.
-
----
 
 ### Elevation of Privileges
 
@@ -158,15 +151,13 @@ Mitigating these risks would require a few things:
 - Compositional analysis (aka dependency checking/scanning), like [`snyk`](https://snyk.io) or [`npm audit`](https://docs.npmjs.com/cli/audit), to ensure that you're not relying on known-vulnerable 3rd party dependencies.
 - Generally practicing least privilege principle, like running your web server as a non-root user.
 
----
-
 ## Summary
 
 So, STRIDE is a threat model methodology that should help you systematically examine and address gaps in the security posture of your applications.
 
 In a future article, we'll take an application and go through this process so you can get a feel for how this works.
 
-If you would like to propose an application for me to threat model next, feel free to drop suggestions in the comments below. 
+If you would like to propose an application for me to threat model next, feel free to drop suggestions in the comments below.
 
 ## Additional Resources
 
@@ -174,13 +165,9 @@ If you would like to propose an application for me to threat model next, feel fr
 - https://www.webtrends.com/blog/2015/04/threat-modeling-with-stride/
 - https://www.oreilly.com/library/view/threat-modeling-designing/9781118810057/9781118810057c03.xhtml
 
----
-
 ## Footnotes
 
 - <a name="tanya-janca">1</a>: https://www.youtube.com/watch?v=YGJqpQy79no&WT.mc_id=shehackspurple-blog-tajanca
-
----
 
 ## Updates
 
