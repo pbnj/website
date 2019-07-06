@@ -2,6 +2,8 @@
 title: "About"
 ---
 
+![Profile photo](profile.png)
+
 Peter Benjamin is a Software Engineer and a Developer Advocate with a passion
 for enabling and empowering Engineers to build secure and scalable
 applications, services, and platforms on modern and containerized
