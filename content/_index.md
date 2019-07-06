@@ -2,7 +2,7 @@
 title: "About"
 ---
 
-![Profile photo](profile.png)
+<img src="profile.jpg" alt="Profile photo" width="300" />
 
 Peter Benjamin is a Software Engineer and a Developer Advocate with a passion
 for enabling and empowering Engineers to build secure and scalable
